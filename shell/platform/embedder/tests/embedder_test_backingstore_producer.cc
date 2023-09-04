@@ -15,10 +15,15 @@
 #include "third_party/skia/include/gpu/ganesh/SkSurfaceGanesh.h"
 #include "third_party/skia/include/gpu/ganesh/gl/GrGLBackendSurface.h"
 #include "third_party/skia/include/gpu/gl/GrGLTypes.h"
+#include "third_party/skia/include/gpu/vk/GrVkTypes.h"
 
 #include <cstdlib>
 #include <memory>
 #include <utility>
+
+#ifdef SHELL_ENABLE_VULKAN
+#include "third_party/skia/include/gpu/ganesh/vk/GrVkBackendSurface.h"
+#endif  // SHELL_ENABLE_VULKAN
 
 // TODO(zanderso): https://github.com/flutter/flutter/issues/127701
 // NOLINTBEGIN(bugprone-unchecked-optional-access)
@@ -328,8 +333,8 @@ bool EmbedderTestBackingStoreProducer::CreateVulkanImage(
       .fSampleCount = 1,
       .fLevelCount = 1,
   };
-  GrBackendTexture backend_texture(surface_size.width(), surface_size.height(),
-                                   image_info);
+  auto backend_texture = GrBackendTextures::MakeVk(
+      surface_size.width(), surface_size.height(), image_info);
 
   SkSurfaceProps surface_properties(0, kUnknown_SkPixelGeometry);
 
