@@ -99,7 +99,6 @@ class Color {
   /// For example, to get a fully opaque orange, you would use `const
   /// Color(0xFFFF9000)` (`FF` for the alpha, `FF` for the red, `90` for the
   /// green, and `00` for the blue).
-  @pragma('vm:entry-point')
   const Color(int value) : value = value & 0xFFFFFFFF;
 
   /// Construct a color from the lower 8 bits of four integers.
@@ -2098,7 +2097,6 @@ abstract class Codec {
   void dispose();
 }
 
-@pragma('vm:entry-point')
 base class _NativeCodec extends NativeFieldWrapperClass1 implements Codec {
   //
   // This class is created by the engine, and should not be instantiated
@@ -2106,7 +2104,6 @@ base class _NativeCodec extends NativeFieldWrapperClass1 implements Codec {
   //
   // To obtain an instance of the [Codec] interface, see
   // [instantiateImageCodec].
-  @pragma('vm:entry-point')
   _NativeCodec._();
 
   int? _cachedFrameCount;
@@ -2574,11 +2571,9 @@ abstract class EngineLayer {
   void dispose();
 }
 
-@pragma('vm:entry-point')
 base class _NativeEngineLayer extends NativeFieldWrapperClass1 implements EngineLayer {
   /// This class is created by the engine, and should not be instantiated
   /// or extended directly.
-  @pragma('vm:entry-point')
   _NativeEngineLayer._();
 
   @override
@@ -2889,10 +2884,8 @@ abstract class Path {
   PathMetrics computeMetrics({bool forceClosed = false});
 }
 
-@pragma('vm:entry-point')
 base class _NativePath extends NativeFieldWrapperClass1 implements Path {
   /// Create a new empty [Path] object.
-  @pragma('vm:entry-point')
   _NativePath() { _constructor(); }
 
   /// Avoids creating a new native backing for the path for methods that will
@@ -3489,8 +3482,9 @@ class ColorFilter implements ImageFilter {
         _matrix = null,
         _type = _kTypeMode;
 
-  /// Construct a color filter that transforms a color by a 5x5 matrix, where
-  /// the fifth row is implicitly added in an identity configuration.
+  /// Construct a color filter from a 4x5 row-major matrix. The matrix is
+  /// interpreted as a 5x5 matrix, where the fifth row is the identity
+  /// configuration.
   ///
   /// Every pixel's color value, represented as an `[R, G, B, A]`, is matrix
   /// multiplied to create a new color:
@@ -4197,7 +4191,11 @@ base class Gradient extends Shader {
   /// If `colorStops` is provided, `colorStops[i]` is a number from 0.0 to 1.0
   /// that specifies where `color[i]` begins in the gradient. If `colorStops` is
   /// not provided, then only two stops, at 0.0 and 1.0, are implied (and
-  /// `color` must therefore only have two entries).
+  /// `color` must therefore only have two entries). Stop values less than 0.0
+  /// will be rounded up to 0.0 and stop values greater than 1.0 will be rounded
+  /// down to 1.0. Each stop value must be greater than or equal to the previous
+  /// stop value. Stop values that do not meet this criteria will be rounded up
+  /// to the previous stop value.
   ///
   /// The behavior before `from` and after `to` is described by the `tileMode`
   /// argument. For details, see the [TileMode] enum.
@@ -4239,7 +4237,11 @@ base class Gradient extends Shader {
   /// If `colorStops` is provided, `colorStops[i]` is a number from 0.0 to 1.0
   /// that specifies where `color[i]` begins in the gradient. If `colorStops` is
   /// not provided, then only two stops, at 0.0 and 1.0, are implied (and
-  /// `color` must therefore only have two entries).
+  /// `color` must therefore only have two entries). Stop values less than 0.0
+  /// will be rounded up to 0.0 and stop values greater than 1.0 will be rounded
+  /// down to 1.0. Each stop value must be greater than or equal to the previous
+  /// stop value. Stop values that do not meet this criteria will be rounded up
+  /// to the previous stop value.
   ///
   /// The behavior before and after the radius is described by the `tileMode`
   /// argument. For details, see the [TileMode] enum.
@@ -4301,7 +4303,11 @@ base class Gradient extends Shader {
   /// If `colorStops` is provided, `colorStops[i]` is a number from 0.0 to 1.0
   /// that specifies where `color[i]` begins in the gradient. If `colorStops` is
   /// not provided, then only two stops, at 0.0 and 1.0, are implied (and
-  /// `color` must therefore only have two entries).
+  /// `color` must therefore only have two entries). Stop values less than 0.0
+  /// will be rounded up to 0.0 and stop values greater than 1.0 will be rounded
+  /// down to 1.0. Each stop value must be greater than or equal to the previous
+  /// stop value. Stop values that do not meet this criteria will be rounded up
+  /// to the previous stop value.
   ///
   /// The behavior before `startAngle` and after `endAngle` is described by the
   /// `tileMode` argument. For details, see the [TileMode] enum.
@@ -5766,7 +5772,6 @@ abstract class Canvas {
 }
 
 base class _NativeCanvas extends NativeFieldWrapperClass1 implements Canvas {
-  @pragma('vm:entry-point')
   _NativeCanvas(PictureRecorder recorder, [ Rect? cullRect ])  {
     if (recorder.isRecording) {
       throw ArgumentError('"recorder" must not already be associated with another Canvas.');
@@ -6305,13 +6310,11 @@ abstract class Picture {
   int get approximateBytesUsed;
 }
 
-@pragma('vm:entry-point')
 base class _NativePicture extends NativeFieldWrapperClass1 implements Picture {
   /// This class is created by the engine, and should not be instantiated
   /// or extended directly.
   ///
   /// To create a [Picture], use a [PictureRecorder].
-  @pragma('vm:entry-point')
   _NativePicture._();
 
   @override
@@ -6410,7 +6413,6 @@ abstract class PictureRecorder {
 }
 
 base class _NativePictureRecorder extends NativeFieldWrapperClass1 implements PictureRecorder {
-  @pragma('vm:entry-point')
   _NativePictureRecorder() { _constructor(); }
 
   @Native<Void Function(Handle)>(symbol: 'PictureRecorder::Create')

@@ -39,14 +39,19 @@ declare_args() {
   # overhead may be substantial, this is not enabled by default.
   impeller_trace_all_gl_calls = false
 
-  # Call glGetError after each OpenGL call and log failures.
-  impeller_error_check_all_gl_calls = is_debug
-
   # Enable experimental 3D scene rendering.
   impeller_enable_3d = false
+
+  # Enable to get trace statements for canvas usage.
+  impeller_trace_canvas = false
 }
 
 declare_args() {
+  # Wether to build and include the validation layers.
+  impeller_enable_vulkan_validation_layers =
+      impeller_enable_vulkan && flutter_runtime_mode == "debug" &&
+      target_cpu == "arm64"
+
   # Whether Impeller supports rendering on the platform.
   impeller_supports_rendering =
       impeller_enable_metal || impeller_enable_opengles ||
